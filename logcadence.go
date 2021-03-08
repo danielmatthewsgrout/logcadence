@@ -88,8 +88,7 @@ func main() {
 	go func() {
 		defer chanWait.Done() //signal we have done everything we need to
 		for s := range out {  //read channel in a loop until signalled to stop by channel closing
-
-			println(s)
+			fmt.Println(s)
 		}
 	}()
 
