@@ -35,7 +35,7 @@ Usage of logcadence:
 logcadence -c -f "/var/log/kern.log*" -s "Mar  7 06:31:13" -t STAMP -e "Mar  7 23:59:01" -ss "auth"
 ```
 
-Github doesn't support colours in Markdown to imagine the "auth" bits are green. :)
+Github doesn't support colours in Markdown so imagine the "auth" bits are green. :)
 
 ```log
 Mar  7 06:32:43 hostname kernel: [1329582.856664] wlp0x00x0: deauthenticating from 00:00:00:00:00:00 by local choice (Reason: 3=DEAUTH_LEAVING)
