@@ -8,7 +8,7 @@ Binaries available on the releases page
 
 ## How to Use
 
-```bash
+```text
 $ logcandence -h
 
 Usage of logcadence:
