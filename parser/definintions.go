@@ -76,8 +76,22 @@ func GetTimestampFormat(f string) (string, error) {
 		return "02012006150405", nil
 	case "DDMMYYYYHHMMSSSSS":
 		return "02012006150405.000", nil
+	case "STAMPYEARMICRO":
+		return "02 Jan 2006-15:04:05.000000", nil
+	case "JAVA1":
+		return "2006-01-02 15:04:05,000", nil
+	case "JAVA2":
+		return "2006-01-02 15:04:05.000", nil
+	case "ISO8601COMPLETE":
+		return "2006-01-02T15:04:05.00-07:00", nil
+	case "ISO8601SECONDS":
+		return "2006-01-02T15:04:05-07:00", nil
 	default:
 		return time.ANSIC, fmt.Errorf("Unrecognised timestamp format string %s", f)
 	}
 
 }
+
+//01 Mar 2021-00:00:00.245713
+//12 Dec 2020-09:54:00.002542
+//2020-11-16 01:41:17,125
