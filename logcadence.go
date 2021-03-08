@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"path/filepath"
 	"runtime"
-	"strings"
 	"sync"
 	"time"
 
@@ -15,11 +14,7 @@ import (
 /*  @danielmatthewsgrout */
 
 const (
-	//console colour codes
-	reset  = "\033[0m"
-	red    = "\033[31m"
-	green  = "\033[32m"
-	yellow = "\033[33m"
+	bufferSize = 1000
 )
 
 func main() {
@@ -86,16 +81,6 @@ func main() {
 
 	out := make(chan string) //receiver for output from the parser(s)
 
-	parsers := make([]parser.LogParser, 0)
-	for _, s := range files {
-		parser, err := parser.GetFileLogParser(s, startTime, stopTime, timestampFormat, *substring)
-		if err != nil {
-			fmt.Printf("error creating parser for file %s: %s\n", s, err)
-			return
-		}
-		parsers = append(parsers, parser)
-	}
-
 	chanWait := sync.WaitGroup{}
 	chanWait.Add(1)
 
@@ -103,19 +88,21 @@ func main() {
 	go func() {
 		defer chanWait.Done() //signal we have done everything we need to
 		for s := range out {  //read channel in a loop until signalled to stop by channel closing
-			if colours && *substring != "" && strings.Contains(s, *substring) {
-				s = strings.ReplaceAll(s, *substring, green+*substring+reset) //make the substring search nice and green :)
-			}
+
 			println(s)
 		}
 	}()
 
 	wg := sync.WaitGroup{}
 
-	//start the parsers
-	for _, p := range parsers {
-		wg.Add(1) //wait group will be decremented by the parser
-		go p.Parse(out, *maxLines, &wg)
+	for _, s := range files {
+		parser, err := parser.GetFileLogParser(s, startTime, stopTime, timestampFormat, *substring, colours)
+		if err != nil {
+			fmt.Printf("error creating parser for file %s: %s\n", s, err)
+			return
+		}
+		wg.Add(1)
+		go parser.Parse(out, *maxLines, &wg)
 	}
 
 	//wait for all parsers to complete

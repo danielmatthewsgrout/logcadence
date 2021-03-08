@@ -14,16 +14,28 @@ import (
 
 type fileLogParser struct {
 	file            *os.File
+	fileName        string
 	scanner         *bufio.Scanner
 	start           time.Time
 	stop            time.Time
 	substring       string
 	timestampRegex  *regexp.Regexp
 	timestampFormat string
+	useColour       bool
 }
 
+const (
+	bufferSize = 1000
+
+	//console colour codes
+	reset  = "\033[0m"
+	red    = "\033[31m"
+	green  = "\033[32m"
+	yellow = "\033[33m"
+)
+
 //GetFileLogParser gets a fileLogParser for a given path and sends output to the given channel for timestamps start and stop and substring using timestamp pattern
-func GetFileLogParser(filename string, startTime, stopTime time.Time, timestampformat, substring string) (LogParser, error) {
+func GetFileLogParser(filename string, startTime, stopTime time.Time, timestampformat, substring string, useColour bool) (LogParser, error) {
 
 	f, err := os.Open(filename)
 
@@ -45,6 +57,8 @@ func GetFileLogParser(filename string, startTime, stopTime time.Time, timestampf
 		substring:       substring,
 		timestampRegex:  tsRe,
 		timestampFormat: timestampformat,
+		fileName:        filename,
+		useColour:       useColour,
 	}, nil
 }
 
@@ -85,7 +99,14 @@ func (f *fileLogParser) Parse(out chan string, maxLinesToOutput uint64, wg *sync
 				lineNumber++
 
 				//send this message to the receiver
-				out <- s
+				if f.useColour {
+					if f.useColour && f.substring != "" && strings.Contains(s, f.substring) {
+						s = strings.ReplaceAll(s, f.substring, green+f.substring+reset) //make the substring search nice and green :)
+					}
+					out <- fmt.Sprintf(red+"["+yellow+"%s"+red+"]"+reset+" %s", f.fileName, s)
+				} else {
+					out <- fmt.Sprintf("[%s] %s", f.fileName, s)
+				}
 			}
 		}
 
