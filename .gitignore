@@ -13,3 +13,11 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+logcadence
+logcadence-darwin-386
+logcadence-darwin-amd64
+logcadence-linux-386
+logcadence-linux-amd64
+logcadence-solaris-amd64
+logcadence-windows-386
+logcadence-windows-amd64
