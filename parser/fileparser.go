@@ -63,15 +63,23 @@ func (f *fileLogParser) Parse(out chan string, maxLinesToOutput uint64, wg *sync
 		//read this line as a string
 		s := f.scanner.Text()
 
-		//if we haven't found the start - do we have a match for the timestamp format?
-		if !foundStart && f.timestampRegex.MatchString(s) {
+		//do we have a match for the timestamp format?
+		if f.timestampRegex.MatchString(s) {
 			ts := f.timestampRegex.FindString(s)
 			t, err := time.Parse(f.timestampFormat, ts)
-			foundStart = err == nil && (t.Equal(f.start) || t.After(f.start)) //true if start timestamp found
+			foundStart = err == nil && (t.Equal(f.start) || t.After(f.start)) //true if start timestamp found or after
 		}
 
 		if foundStart { //we know where the start is so output this line and look for the end timestamp
 
+			//see if we are at the end - if needed, don't bother with regex unless we have a valid end time
+			if f.stop.After(f.start) && f.timestampRegex.MatchString(s) {
+				ts := f.timestampRegex.FindString(s)
+				t, err := time.Parse(f.timestampFormat, ts)
+				if err == nil && t.After(f.stop) { //if this passes we found the end timestamp
+					return
+				}
+			}
 			//if substring search is set then do that check
 			if f.substring == "" || strings.Contains(s, f.substring) {
 				lineNumber++
@@ -79,15 +87,6 @@ func (f *fileLogParser) Parse(out chan string, maxLinesToOutput uint64, wg *sync
 				//send this message to the receiver
 				out <- s
 			}
-			//see if we are at the end - if needed, don't bother with regex unless we have a valid end time
-			if f.stop.After(f.start) && f.timestampRegex.MatchString(s) {
-				ts := f.timestampRegex.FindString(s)
-				t, err := time.Parse(f.timestampFormat, ts)
-				if err == nil && (t.Equal(f.stop) || t.After(f.stop)) { //if this passes we found the end timestamp
-					return
-				}
-			}
-
 		}
 
 		//don't read beyond the maximum number of lines - ignore test if maxLines is 0

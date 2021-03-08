@@ -5,10 +5,11 @@ import (
 	"fmt"
 	"path/filepath"
 	"runtime"
-	"std/github.com/danielmatthewsgrout/logcadence/parser"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/danielmatthewsgrout/logcadence/parser"
 )
 
 /*  @danielmatthewsgrout */

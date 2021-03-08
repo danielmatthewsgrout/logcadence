@@ -24,7 +24,7 @@ Usage of logcadence:
         maximum lines to return per file (optional)
   -ss string
         substring required to return line (optional)
-  -c    use colours in output (*nix only) 
+  -c    use colours in output (not on Windows) 
 ```
 
 **Note:** when using wildcards in the filename it reads multiple files in parallel so the output from this will not be ordered.
