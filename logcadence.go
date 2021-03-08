@@ -13,7 +13,6 @@ import (
 
 /*  @danielmatthewsgrout */
 
-//buffer for channel - to prevent the output from blocking the log parsing too much
 const (
 	//console colour codes
 	reset  = "\033[0m"
@@ -98,6 +97,7 @@ func main() {
 
 	chanWait := sync.WaitGroup{}
 	chanWait.Add(1)
+
 	//start output writer
 	go func() {
 		defer chanWait.Done() //signal we have done everything we need to
@@ -110,8 +110,8 @@ func main() {
 	}()
 
 	wg := sync.WaitGroup{}
-	//start the parsers
 
+	//start the parsers
 	for _, p := range parsers {
 		wg.Add(1) //wait group will be decremented by the parser
 		go p.Parse(out, *maxLines, &wg)
@@ -120,5 +120,7 @@ func main() {
 	//wait for all parsers to complete
 	wg.Wait()
 	close(out)
-	chanWait.Wait() //wait for channel to finish printing everything in the buffer
+
+	//wait for channel to finish printing everything in the buffer
+	chanWait.Wait()
 }
