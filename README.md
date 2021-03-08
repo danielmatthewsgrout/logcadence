@@ -1,6 +1,6 @@
 # logcadence
 
-Log snipping by timestamp
+Log snipping by timestamp.  Supports multiple input files.
 
 Source requires Golang >= v1.16
 
@@ -35,15 +35,55 @@ Usage of logcadence:
 logcadence -c -f "/var/log/kern.log*" -s "Mar  7 06:31:13" -t STAMP -e "Mar  7 23:59:01" -ss "auth"
 ```
 
-Github doesn't support colours in Markdown so imagine the "auth" bits are green. :)
+Github doesn't support colours in Markdown so imagine the "daniel" bits are green and the filename is yellow with red brackets. :)
 
 ```log
-Mar  7 06:32:43 hostname kernel: [1329582.856664] wlp0x00x0: deauthenticating from 00:00:00:00:00:00 by local choice (Reason: 3=DEAUTH_LEAVING)
-Mar  7 06:32:49 hostname kernel: [1329589.080753] wlp0x00x0: authenticate with 00:00:00:00:00:00
-Mar  7 06:32:49 hostname kernel: [1329589.087006] wlp0x00x0: send auth to 00:00:00:00:00:00 (try 1/3)
-Mar  7 06:32:50 hostname kernel: [1329589.127305] wlp0x00x0: authenticated
-Mar  7 15:24:23 hostname kernel: [1361481.976513] wlp0x00x0: authenticate with 00:00:00:00:00:00
-Mar  7 15:24:23 hostname kernel: [1361481.989113] wlp0x00x0: send auth to 00:00:00:00:00:00 (try 1/3)
+[/var/log/auth.log.1] Feb  2 20:23:51 daniel-XPS-13-9360 systemd-logind[911]: Power key pressed.
+[/var/log/auth.log.1] Feb  2 20:23:51 daniel-XPS-13-9360 systemd-logind[911]: Powering Off...
+[/var/log/auth.log] Feb 10 07:15:01 daniel-XPS-13-9360 CRON[29090]: pam_unix(cron:session): session opened for user root by (uid=0)
+[/var/log/auth.log] Feb 10 07:15:01 daniel-XPS-13-9360 CRON[29090]: pam_unix(cron:session): session closed for user root
+[/var/log/auth.log] Feb 10 07:17:01 daniel-XPS-13-9360 CRON[29448]: pam_unix(cron:session): session opened for user root by (uid=0)
+[/var/log/auth.log] Feb 10 07:17:01 daniel-XPS-13-9360 CRON[29448]: pam_unix(cron:session): session closed for user root
+[/var/log/auth.log] Feb 10 07:25:01 daniel-XPS-13-9360 CRON[30888]: pam_unix(cron:session): session opened for user root by (uid=0)
+[/var/log/auth.log] Feb 10 07:25:01 daniel-XPS-13-9360 CRON[30888]: pam_unix(cron:session): session closed for user root
+[/var/log/auth.log] Feb 10 07:30:01 daniel-XPS-13-9360 CRON[31781]: pam_unix(cron:session): session opened for user root by (uid=0)
+[/var/log/auth.log] Feb 10 07:30:01 daniel-XPS-13-9360 CRON[31781]: pam_unix(cron:session): session closed for user root
+[/var/log/auth.log] Feb 10 07:35:01 daniel-XPS-13-9360 CRON[32655]: pam_unix(cron:session): session opened for user root by (uid=0)
+[/var/log/auth.log] Feb 10 07:35:01 daniel-XPS-13-9360 CRON[32655]: pam_unix(cron:session): session closed for user root
+[/var/log/auth.log] Feb 10 07:39:44 daniel-XPS-13-9360 gnome-keyring-daemon[2345]: asked to register item /org/freedesktop/secrets/collection/login/1, but it's already registered
+[/var/log/auth.log] Feb 10 07:45:01 daniel-XPS-13-9360 CRON[2096]: pam_unix(cron:session): session opened for user root by (uid=0)
+[/var/log/auth.log] Feb 10 07:45:01 daniel-XPS-13-9360 CRON[2096]: pam_unix(cron:session): session closed for user root
+[/var/log/auth.log] Feb 10 07:46:42 daniel-XPS-13-9360 gdm-password]: gkr-pam: unlocked login keyring
+[/var/log/auth.log] Feb 10 07:55:01 daniel-XPS-13-9360 CRON[5040]: pam_unix(cron:session): session opened for user root by (uid=0)
+[/var/log/auth.log] Feb 10 07:55:01 daniel-XPS-13-9360 CRON[5040]: pam_unix(cron:session): session closed for user root
+[/var/log/auth.log] Feb 10 08:05:01 daniel-XPS-13-9360 CRON[6856]: pam_unix(cron:session): session opened for user root by (uid=0)
+[/var/log/auth.log] Feb 10 08:05:01 daniel-XPS-13-9360 CRON[6856]: pam_unix(cron:session): session closed for user root
+[/var/log/auth.log] Feb 10 08:15:01 daniel-XPS-13-9360 CRON[8792]: pam_unix(cron:session): session opened for user root by (uid=0)
+[/var/log/auth.log] Feb 10 08:15:01 daniel-XPS-13-9360 CRON[8792]: pam_unix(cron:session): session closed for user root
+[/var/log/auth.log] Feb 10 08:17:01 daniel-XPS-13-9360 CRON[9146]: pam_unix(cron:session): session opened for user root by (uid=0)
+[/var/log/auth.log] Feb 10 08:17:01 daniel-XPS-13-9360 CRON[9146]: pam_unix(cron:session): session closed for user root
+[/var/log/auth.log] Feb 10 08:25:01 daniel-XPS-13-9360 CRON[10572]: pam_unix(cron:session): session opened for user root by (uid=0)
+[/var/log/auth.log] Feb 10 08:25:01 daniel-XPS-13-9360 CRON[10572]: pam_unix(cron:session): session closed for user root
+[/var/log/auth.log] Feb 10 08:30:01 daniel-XPS-13-9360 CRON[11445]: pam_unix(cron:session): session opened for user root by (uid=0)
+[/var/log/auth.log] Feb 10 08:30:01 daniel-XPS-13-9360 CRON[11445]: pam_unix(cron:session): session closed for user root
+[/var/log/auth.log] Feb 10 08:35:01 daniel-XPS-13-9360 CRON[12332]: pam_unix(cron:session): session opened for user root by (uid=0)
+[/var/log/auth.log] Feb 10 08:35:01 daniel-XPS-13-9360 CRON[12332]: pam_unix(cron:session): session closed for user root
+[/var/log/auth.log] Feb 10 08:39:45 daniel-XPS-13-9360 gnome-keyring-daemon[2345]: asked to register item /org/freedesktop/secrets/collection/login/1, but it's already registered
+[/var/log/auth.log.1] Feb  2 20:23:51 daniel-XPS-13-9360 systemd-logind[911]: System is powering down.
+[/var/log/auth.log.1] Feb  2 20:23:51 daniel-XPS-13-9360 sshd[1070]: Received signal 15; terminating.
+[/var/log/auth.log.1] Feb  2 20:24:29 daniel-XPS-13-9360 sshd[1081]: Server listening on 0.0.0.0 port 22.
+[/var/log/auth.log.1] Feb  2 20:24:29 daniel-XPS-13-9360 sshd[1081]: Server listening on :: port 22.
+[/var/log/auth.log.1] Feb  2 20:24:29 daniel-XPS-13-9360 systemd-logind[879]: New seat seat0.
+[/var/log/auth.log] Feb 10 11:22:40 daniel-XPS-13-9360 systemd-logind[917]: Operation 'sleep' finished.
+[/var/log/auth.log] Feb 10 11:22:44 daniel-XPS-13-9360 gdm-password]: gkr-pam: unlocked login keyring
+[/var/log/auth.log] Feb 10 11:22:51 daniel-XPS-13-9360 pkexec: pam_unix(polkit-1:session): session opened for user root by (uid=1000)
+[/var/log/auth.log] Feb 10 11:22:51 daniel-XPS-13-9360 pkexec[14650]: daniel: Executing command [USER=root] [TTY=unknown] [CWD=/home/daniel] [COMMAND=/usr/bin/cpufreqctl --no-turbo --set=0]
+[/var/log/auth.log] Feb 10 11:22:51 daniel-XPS-13-9360 pkexec: pam_unix(polkit-1:session): session opened for user root by (uid=1000)
+[/var/log/auth.log] Feb 10 11:22:51 daniel-XPS-13-9360 pkexec[14657]: daniel: Executing command [USER=root] [TTY=unknown] [CWD=/home/daniel] [COMMAND=/usr/bin/cpufreqctl --no-turbo --set=1]
+[/var/log/auth.log.1] Feb  2 20:24:29 daniel-XPS-13-9360 systemd-logind[879]: Watching system buttons on /dev/input/event3 (Power Button)
+[/var/log/auth.log] Feb 10 11:22:51 daniel-XPS-13-9360 pkexec: pam_unix(polkit-1:session): session opened for user root by (uid=1000)
+[/var/log/auth.log.1] Feb  2 20:24:29 daniel-XPS-13-9360 systemd-logind[879]: Watching system buttons on /dev/input/event1 (Power Button)
+[/var/log/auth.log.1] Feb  2 20:24:29 daniel-XPS-13-9360 systemd-logind[879]: Watching system buttons on /dev/input/event0 (Lid Switch)
 ```
 
 ## Timestamp Formats
